@@ -45,6 +45,8 @@ public class RecListFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -86,27 +88,34 @@ public class RecListFragment extends Fragment {
 
         recordingsAdapter=new RecordingsAdapter(getContext(),0,recordingsItemList);
 
-        listView.setAdapter(recordingsAdapter);
 
-       /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RecordingsItem recordingsItem=(RecordingsItem) parent.getItemAtPosition(position);
+                Toast.makeText(getContext(), recordingsItem.getName(), Toast.LENGTH_SHORT).show();
 
-                TextView name=view.findViewById(R.id.recTitle);
-                Toast.makeText(getActivity(), name.getText().toString(), Toast.LENGTH_SHORT).show();
-                try {
-                    mFileName=getFilePath("")+listView.getItemAtPosition(position)."";
-                    mediaPlayer.setDataSource(mFileName);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    Toast.makeText(getActivity().getApplicationContext(), "Recording Started Playing", Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    Toast.makeText(getActivity().getApplicationContext(), "prepare() failed", Toast.LENGTH_LONG).show();
-                }
+
             }
-        });*/
+        });
+        listView.setAdapter(recordingsAdapter);
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RecordingsItem recordingsItem=(RecordingsItem) parent.getItemAtPosition(position);
+                Toast.makeText(getContext(), recordingsItem.getName(), Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
     }
 
 

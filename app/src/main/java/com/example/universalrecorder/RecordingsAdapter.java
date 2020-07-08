@@ -69,29 +69,26 @@ public class RecordingsAdapter extends ArrayAdapter<RecordingsItem> {
             size.setText(item.getSize());
             date.setText(item.getDate());
             duration.setText(item.getLength());
+            imageButton.setTag(item.getName());
+
             view.setTag("notPlaying");
 
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String tag=imageButton.getTag().toString();
-                    imageButton.setImageResource(R.drawable.pause);
-                    String rec=item.getName();
+                    String rec=view.findViewById(R.id.recTitle).getTag().toString();
                     String viewTag=view.getTag().toString();
-                    if(tag.equals("play") && view.getTag().equals("notPlaying")){
+                    if(viewTag.equals("notPlaying")){
                         imageButton.setImageResource(R.drawable.pause);
-                        imageButton.setTag("pause");
+                        //imageButton.setTag("pause");
                         view.setTag("playing");
                         try {
-                            playAudio(view, imageButton,rec);
+                            playAudio(view, imageButton,tag);
                         } catch (IOException e) {
                             Toast.makeText(ctx, "prepare() failed", Toast.LENGTH_SHORT).show();
                         }
 
-                    }else if(imageButton.getTag().equals("pause")){
-                        imageButton.setImageResource(R.drawable.play);
-                        imageButton.setTag("play");
-                        view.setTag("notPlaying");
                     }
 
                 }
@@ -115,6 +112,7 @@ public class RecordingsAdapter extends ArrayAdapter<RecordingsItem> {
 
     void playAudio(View v, final ImageButton imageButton, String fileName) throws IOException {
         mFileName=getDirectoryPath();
+        oneTimeOnly=0;
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         ViewGroup viewGroup = view.findViewById(android.R.id.content);
 
@@ -124,6 +122,7 @@ public class RecordingsAdapter extends ArrayAdapter<RecordingsItem> {
         alertDialog.show();
         mediaPlayer=new MediaPlayer();
         seekBar=dialogView.findViewById(R.id.seekBar);
+        seekBar.setClickable(false);
         txt1=dialogView.findViewById(R.id.startTime);
         txt2=dialogView.findViewById(R.id.endTime);
 
@@ -165,11 +164,10 @@ public class RecordingsAdapter extends ArrayAdapter<RecordingsItem> {
             public void onDismiss(DialogInterface dialog) {
 
                 imageButton.setImageResource(R.drawable.play);
-                imageButton.setTag("play");
                 view.setTag("notPlaying");
                 mediaPlayer.release();
                 mediaPlayer = null;
-                seekBar.setProgress(0);
+                seekBar=null;
                 alertDialog.cancel();
                 myHandler.removeCallbacks(UpdateSongTime);
                 startTime=0;

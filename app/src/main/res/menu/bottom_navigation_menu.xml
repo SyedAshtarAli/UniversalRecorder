@@ -10,9 +10,5 @@
         android:enabled="true"
         android:icon="@drawable/audio"
         android:title="@string/audios"/>
-    <item
-        android:id="@+id/btnImages"
-        android:enabled="true"
-        android:icon="@drawable/images"
-        android:title="@string/images"/>
+
 </menu>

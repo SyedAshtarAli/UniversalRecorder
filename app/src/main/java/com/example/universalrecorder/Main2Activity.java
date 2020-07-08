@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
@@ -27,12 +26,12 @@ import java.io.IOException;
 public class Main2Activity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     BottomNavigationView bottomNavigationView;
-    UserPresentBroadcastReceiver receiver;
     int count=0;
     int TAKE_PHOTO_CODE = 0;
     private int mMenuId;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,21 +42,8 @@ public class Main2Activity extends AppCompatActivity implements BottomNavigation
         loadFragment(new RecordFragment());
 
 
-        receiver = new UserPresentBroadcastReceiver(){
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)){
-                    getImage();
 
-                }else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
-                    Log.d("tag", "Phone locked");
-                }
-            }
-        };
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_USER_PRESENT);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(receiver, filter);
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.getMenu().findItem(R.id.btnRecord).setChecked(true);
@@ -110,11 +96,6 @@ public class Main2Activity extends AppCompatActivity implements BottomNavigation
             case R.id.btnRecord: {
                 Toast.makeText(this, "Record", Toast.LENGTH_SHORT).show();
                 loadFragment(new RecordFragment());
-            }
-            break;
-            case R.id.btnImages: {
-                Toast.makeText(this, "Images", Toast.LENGTH_SHORT).show();
-                loadFragment(new PicturesFragment());
             }
             break;
             case R.id.btnAudio: {

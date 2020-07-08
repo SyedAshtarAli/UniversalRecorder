@@ -38,7 +38,6 @@ import java.io.IOException;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.universalrecorder.MainActivity.REQUEST_AUDIO_PERMISSION_CODE;
 
 
 /**
@@ -108,6 +107,8 @@ public class RecordFragment extends Fragment {
     int recNum;
 
     AlertDialog alertDialog;
+
+    public static final int REQUEST_AUDIO_PERMISSION_CODE = 1;
 
 
 
@@ -267,14 +268,15 @@ public class RecordFragment extends Fragment {
                 Button saveBtn=dialogView.findViewById(R.id.save_btn);
                 Button cancelBtn=dialogView.findViewById(R.id.cancel_btn);
                 final EditText recNameEdt=dialogView.findViewById(R.id.name_edt);
-                recNameEdt.setText("Recording"+(recNum-1)+".mp3");
+                recNameEdt.setText("Recording"+(recNum-1));
+
                 alertDialog = builder.create();
                 alertDialog.show();
                 saveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        mRecorder.setOutputFile(getDirectoryPath()+recNameEdt.getText().toString()+".mp3");
+                        String output=getDirectoryPath()+recNameEdt.getText().toString()+".mp3";
+                        mRecorder.setOutputFile(output);
                         mRecorder.stop();
                         mRecorder.release();
                         mRecorder = null;

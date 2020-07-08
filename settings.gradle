@@ -1,0 +1,2 @@
+rootProject.name='Universal Recorder'
+include ':app'

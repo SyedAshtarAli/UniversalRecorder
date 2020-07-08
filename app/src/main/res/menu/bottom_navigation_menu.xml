@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/btnRecord"
+        android:enabled="true"
+        android:icon="@drawable/record"
+        android:title="@string/record"/>
+    <item
+        android:id="@+id/btnAudio"
+        android:enabled="true"
+        android:icon="@drawable/audio"
+        android:title="@string/audios"/>
+    <item
+        android:id="@+id/btnImages"
+        android:enabled="true"
+        android:icon="@drawable/images"
+        android:title="@string/images"/>
+</menu>

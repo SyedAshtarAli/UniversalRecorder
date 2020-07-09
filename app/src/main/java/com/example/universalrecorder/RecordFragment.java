@@ -164,7 +164,6 @@ public class RecordFragment extends Fragment {
 
 
 
-
                 if(CheckPermissions() && checkDirectory()) {
                     recBtn.setEnabled(false);
                     pauBtn.setEnabled(true);
@@ -260,6 +259,9 @@ public class RecordFragment extends Fragment {
                 pauBtn.setAlpha((float)0.5);
                 resBtn.setAlpha((float)0.5);
                 stopBtn.setAlpha((float)0.5);
+                mRecorder.stop();
+                mRecorder.release();
+                mRecorder = null;
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 ViewGroup viewGroup = view.findViewById(android.R.id.content);
@@ -269,22 +271,26 @@ public class RecordFragment extends Fragment {
                 Button cancelBtn=dialogView.findViewById(R.id.cancel_btn);
                 final EditText recNameEdt=dialogView.findViewById(R.id.name_edt);
                 recNameEdt.setText("Recording"+(recNum-1));
+                recNameEdt.setTag("Recording"+(recNum-1));
 
                 alertDialog = builder.create();
                 alertDialog.show();
                 saveBtn.setOnClickListener(new View.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onClick(View v) {
-                        String output=getDirectoryPath()+recNameEdt.getText().toString()+".mp3";
-                        mRecorder.setOutputFile(output);
-                        mRecorder.stop();
-                        mRecorder.release();
-                        mRecorder = null;
-                        resetChronometer(v);
-                        Toast.makeText(getActivity().getApplicationContext(), "Recording Stopped", Toast.LENGTH_LONG).show();
+
+
                         alertDialog.hide();
+                        resetChronometer(v);
+                        chronometer.stop();
+                        resetChronometer(view);
+                        Toast.makeText(getActivity().getApplicationContext(), "Recording Stopped", Toast.LENGTH_LONG).show();
 
                         Toast.makeText(getActivity(), "save Clicked", Toast.LENGTH_SHORT).show();
+                        if(!recNameEdt.getText().equals(recNameEdt.getTag()))
+                            rename(recNameEdt.getText().toString(),recNameEdt.getTag().toString());
+
                     }
                 });
 
@@ -297,10 +303,11 @@ public class RecordFragment extends Fragment {
                         Toast.makeText(getActivity().getApplicationContext(), "Recording Canceled", Toast.LENGTH_LONG).show();
                         mRecorder.reset();
                         mRecorder=null;
+                        chronometer.stop();
+                        resetChronometer(view);
                     }
                 });
-                chronometer.stop();
-                resetChronometer(view);
+
 
 
             }
@@ -312,7 +319,15 @@ public class RecordFragment extends Fragment {
         return view;
     }
 
+    boolean rename(String newName,String oldName){
+        String oldFilePath=getDirectoryPath()+"/"+oldName+".mp3";
+        String newFilePath=getDirectoryPath()+"/"+newName+".mp3";
+        File f1 = new File(oldFilePath);
+        File f2 = new File(newFilePath);
+        boolean b = f1.renameTo(f2);
+        return b;
 
+    }
     public boolean CheckPermissions() {
         int result = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int result1 = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), RECORD_AUDIO);

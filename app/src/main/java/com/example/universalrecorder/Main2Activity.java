@@ -94,12 +94,10 @@ public class Main2Activity extends AppCompatActivity implements BottomNavigation
 
         switch (item.getItemId()) {
             case R.id.btnRecord: {
-                Toast.makeText(this, "Record", Toast.LENGTH_SHORT).show();
                 loadFragment(new RecordFragment());
             }
             break;
             case R.id.btnAudio: {
-                Toast.makeText(this, "Audio", Toast.LENGTH_SHORT).show();
                 loadFragment(new RecListFragment());
             }
             break;

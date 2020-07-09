@@ -9,6 +9,6 @@
         android:id="@+id/btnAudio"
         android:enabled="true"
         android:icon="@drawable/audio"
-        android:title="@string/audios"/>
+        android:title="Recordings"/>
 
 </menu>

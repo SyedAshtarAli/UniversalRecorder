@@ -73,6 +73,7 @@ public class RecListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        checkDirectory();
         searchTXT(new File(getFilePath("")));
     }
     ListView listView;
@@ -86,7 +87,11 @@ public class RecListFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_rec_list, container, false);
         listView=view.findViewById(R.id.listView);
 
+
+        if(recordingsItemList.size()!=0)
         recordingsAdapter=new RecordingsAdapter(getContext(),0,recordingsItemList);
+        else
+            Toast.makeText(getContext(), "Empty List", Toast.LENGTH_SHORT).show();
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -107,15 +112,6 @@ public class RecListFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RecordingsItem recordingsItem=(RecordingsItem) parent.getItemAtPosition(position);
-                Toast.makeText(getContext(), recordingsItem.getName(), Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
     }
 
 
@@ -228,13 +224,26 @@ public class RecListFragment extends Fragment {
     }
 
     String getFilePath(String fileName){
+        String path="";
         if(fileName.equals("")){
-         return Environment.getExternalStorageDirectory()+"/Recordings"+fileName;
+         path= Environment.getExternalStorageDirectory()+"/Recordings"+fileName;
 
         }
         else
-            return Environment.getExternalStorageDirectory()+"/Recordings";
+            path= Environment.getExternalStorageDirectory()+"/Recordings";
+
+        return path;
     }
 
+    boolean checkDirectory(){
+        String myFolder=Environment.getExternalStorageDirectory()+"/";
+        File file= new File(myFolder, "Recordings");
 
+        if(!file.exists()) {
+            if(file.mkdir()); //directory is created;
+        }
+
+        return true;
+
+    }
 }
